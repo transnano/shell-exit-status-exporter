@@ -178,7 +178,7 @@ func main() {
 	flag.Parse()
 
 	if *showVersion {
-		fmt.Fprintln(os.Stdout, version.Print("shell_exit_status_exporter"))
+		fmt.Fprintln(os.Stdout, version.Print("shell-exit-status-exporter"))
 		os.Exit(0)
 	}
 

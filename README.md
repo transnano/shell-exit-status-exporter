@@ -1,4 +1,4 @@
-# Shell exit code Exporter
+# Shell exit status Exporter
 
 GitLab: https://gitlab.com/transnano/shell_exit_status_exporter
 
@@ -42,7 +42,7 @@ to install tools such as curl for certain scenarios.
 
 ## Probing
 
-To return the shell exit code exporter internal metrics exposed by the default Prometheus
+To return the shell exit status exporter internal metrics exposed by the default Prometheus
 handler:
 
 `$ curl http://localhost:9121/metrics`
@@ -54,7 +54,7 @@ To execute a script, use the `name` parameter to the `/probe` endpoint:
 ```
 shell_exit_status_duration_seconds{script="failure"} 2.008337
 shell_exit_status_status{script="failure"} 255
-shell_exit_status_finished{script="failure"} 0
+shell_exit_status_finished{script="failure"} 1
 ```
 
 A regular expression may be specified with the `pattern` paremeter:
@@ -67,7 +67,7 @@ shell_exit_status_status{script="timeout"} 1
 shell_exit_status_finished{script="timeout"} 0
 shell_exit_status_duration_seconds{script="failure"} 2.015021
 shell_exit_status_status{script="failure"} 255
-shell_exit_status_finished{script="failure"} 0
+shell_exit_status_finished{script="failure"} 1
 shell_exit_status_duration_seconds{script="success"} 5.013670
 shell_exit_status_status{script="success"} 0
 shell_exit_status_finished{script="success"} 1
