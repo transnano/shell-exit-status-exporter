@@ -16,7 +16,7 @@ before_script:
   - ln -svf $CI_PROJECT_DIR $GOPATH/src/$REPO_NAME
   - cd $GOPATH/src/$REPO_NAME
   - go get -u github.com/kardianos/govendor
-  - govengor sync
+  - govendor sync
 
 stages:
     - test
