@@ -34,7 +34,7 @@ docker run -d -p 9121:9121 --name shell-exit-status-exporter \
   -web.listen-address=":9121" \
   -web.telemetry-path="/metrics" \
   -config.shell="/bin/sh" \
-  adhocteam/shell-exit-status-exporter:master
+  transnano/shell-exit-status-exporter:0.0.2
 ```
 
 You'll need to customize the docker image or use the binary on the host system
