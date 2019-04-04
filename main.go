@@ -1,3 +1,11 @@
+// Copyright 2019 Ryota Suginaga
+
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+// The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
 package main
 
 import (
@@ -18,12 +26,14 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/common/log"
 	"github.com/prometheus/common/version"
+
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 var (
 	showVersion   = flag.Bool("version", false, "Print version information.")
 	configFile    = flag.String("config.file", "shell-exit-status-exporter.yml", "Shell exit status exporter configuration file.")
-	listenAddress = flag.String("web.listen-address", ":9121", "The address to listen on for HTTP requests.")
+	listenAddress = flag.String("web.listen-address", ":9062", "The address to listen on for HTTP requests.")
 	metricsPath   = flag.String("web.telemetry-path", "/metrics", "Path under which to expose metrics.")
 	shell         = flag.String("config.shell", "/bin/sh", "Shell to execute script")
 )
@@ -45,7 +55,7 @@ type Measurement struct {
 	ExitStatus int
 }
 
-func runScript(script *Script) (error, int) {
+func runScript(script *Script) (int, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(script.Timeout)*time.Second)
 	exitStatus := 0
 	defer cancel()
@@ -55,15 +65,15 @@ func runScript(script *Script) (error, int) {
 	bashIn, err := bashCmd.StdinPipe()
 
 	if err != nil {
-		return err, exitStatus
+		return exitStatus, err
 	}
 
 	if err = bashCmd.Start(); err != nil {
-		return err, exitStatus
+		return exitStatus, err
 	}
 
 	if _, err = bashIn.Write([]byte(script.Content)); err != nil {
-		return err, exitStatus
+		return exitStatus, err
 	}
 
 	bashIn.Close()
@@ -75,18 +85,18 @@ func runScript(script *Script) (error, int) {
 				exitStatus = status.ExitStatus()
 				log.Debugf("Exit Status: %d", exitStatus)
 				if exitStatus < 0 {
-					return err, exitStatus
+					return exitStatus, err
 				}
 			} else {
-				return err, exitStatus
+				return exitStatus, err
 			}
 		} else {
 			log.Fatalf("cmd.Wait: %v", err)
-			return err, exitStatus
+			return exitStatus, err
 		}
 	}
 
-	return nil, bashCmd.ProcessState.Sys().(syscall.WaitStatus).ExitStatus()
+	return bashCmd.ProcessState.Sys().(syscall.WaitStatus).ExitStatus(), nil
 }
 
 func runScripts(scripts []*Script) []*Measurement {
@@ -98,7 +108,7 @@ func runScripts(scripts []*Script) []*Measurement {
 		go func(script *Script) {
 			start := time.Now()
 			finished := 0
-			err, exitStatus := runScript(script)
+			exitStatus, err := runScript(script)
 			duration := time.Since(start).Seconds()
 
 			if err == nil {
@@ -206,7 +216,7 @@ func main() {
 		}
 	}
 
-	http.Handle(*metricsPath, prometheus.Handler())
+	http.Handle(*metricsPath, promhttp.Handler())
 
 	http.HandleFunc("/probe", func(w http.ResponseWriter, r *http.Request) {
 		scriptRunHandler(w, r, &config)

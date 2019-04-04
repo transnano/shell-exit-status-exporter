@@ -24,4 +24,4 @@ scrape_configs:
         - '.*'
     static_configs:
       - targets:
-        - 'shell:9121'
+        - 'shell:9062'
