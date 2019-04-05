@@ -1,6 +1,10 @@
+go:
+    cgo: true
 repository:
     path: gitlab.com/transnano/shell_exit_status_exporter
 build:
+    binaries:
+        - name: shell_exit_status_exporter
     flags: -mod=vendor -a -tags 'netgo static_build'
     ldflags: |
         -X github.com/prometheus/common/version.Version={{.Version}}
@@ -10,18 +14,11 @@ build:
         -X github.com/prometheus/common/version.BuildDate={{date "20060102-15:04:05"}}
 tarball:
     files:
-        - shell-exit-status-exporter.yml
         - LICENSE
+        - NOTICE
 crossbuild:
     platforms:
-        - linux/amd64
-        - linux/386
-        - linux/arm
-        - linux/arm64
-        - linux/mips
-        - linux/mipsle
-        - linux/mips64
-        - linux/mips64le
-        - linux/ppc64
-        - linux/ppc64le
-        - linux/s390x
+        - darwin/amd64
+        - darwin/386
+        - netbsd/amd64
+        - netbsd/386

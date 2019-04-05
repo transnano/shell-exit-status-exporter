@@ -28,13 +28,13 @@ scripts:
 You can run via docker with:
 
 ``` shell
-docker run -d -p 9121:9121 --name shell-exit-status-exporter \
+docker run -d -p 9062:9062 --name shell-exit-status-exporter \
   -v `pwd`/config.yml:/etc/shell-exit-status-exporter/config.yml:ro \
   -config.file=/etc/shell-exit-status-exporter/config.yml
-  -web.listen-address=":9121" \
+  -web.listen-address=":9062" \
   -web.telemetry-path="/metrics" \
   -config.shell="/bin/sh" \
-  transnano/shell-exit-status-exporter:0.0.2
+  transnano/shell-exit-status-exporter:0.0.3
 ```
 
 You'll need to customize the docker image or use the binary on the host system
@@ -45,11 +45,11 @@ to install tools such as curl for certain scenarios.
 To return the shell exit status exporter internal metrics exposed by the default Prometheus
 handler:
 
-`$ curl http://localhost:9121/metrics`
+`$ curl http://localhost:9062/metrics`
 
 To execute a script, use the `name` parameter to the `/probe` endpoint:
 
-`$ curl http://localhost:9121/probe?name=failure`
+`$ curl http://localhost:9062/probe?name=failure`
 
 ```
 shell_exit_status_duration_seconds{script="failure"} 2.008337
@@ -59,7 +59,7 @@ shell_exit_status_finished{script="failure"} 1
 
 A regular expression may be specified with the `pattern` paremeter:
 
-`$ curl http://localhost:9121/probe?pattern=.*`
+`$ curl http://localhost:9062/probe?pattern=.*`
 
 ```
 shell_exit_status_duration_seconds{script="timeout"} 1.005727

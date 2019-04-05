@@ -1,21 +1,21 @@
 version: '2'
 services:
   shell:
-    image: transnano/shell-exit-status-exporter:0.0.2
+    image: transnano/shell-exit-status-exporter:0.0.3
     container_name: shell
     ports:
-     - 9121:9121
+     - 9062:9062
     volumes:
      - ./config.yml:/etc/shell-exit-status-exporter/config.yml:ro
   prometheus:
-    image: prom/prometheus:v2.6.1
+    image: prom/prometheus:v2.8.1
     container_name: prometheus
     ports:
       - 9090:9090
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
   grafana:
-    image: grafana/grafana:5.4.3
+    image: grafana/grafana:6.1.0
     container_name: grafana
     ports:
       - 3000:3000

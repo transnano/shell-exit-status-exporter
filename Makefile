@@ -11,57 +11,72 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-GO    := GO15VENDOREXPERIMENT=1 go
-PROMU := $(GOPATH)/bin/promu
-pkgs   = $(shell $(GO) list ./... | grep -v /vendor/)
+# Ensure that 'all' is the default target otherwise it will be the first target from Makefile.common.
+all::
 
-PREFIX            ?= $(shell pwd)
-BIN_DIR           ?= $(shell pwd)
-DOCKER_IMAGE_NAME ?= transnano/shell-exit-status-exporter
-DOCKER_IMAGE_TAG  ?= $(subst /,-,$(shell git rev-parse --abbrev-ref HEAD))
+include Makefile.common
 
-all: format build test
+PROMTOOL_VERSION ?= 2.5.0
+PROMTOOL_URL     ?= https://github.com/prometheus/prometheus/releases/download/v$(PROMTOOL_VERSION)/prometheus-$(PROMTOOL_VERSION).$(GO_BUILD_PLATFORM).tar.gz
+PROMTOOL         ?= $(FIRST_GOPATH)/bin/promtool
 
-style:
-	@echo ">> checking code style"
-	@! gofmt -d $(shell find . -path ./vendor -prune -o -name '*.go' -print) | grep '^'
+DOCKER_IMAGE_NAME ?= shell-exit-status-exporter
+MACH              ?= $(shell uname -m)
+DOCKERFILE        ?= Dockerfile
 
-test:
-	@echo ">> running tests"
-	@$(GO) test -short $(pkgs)
+STATICCHECK_IGNORE =
 
-format:
-	@echo ">> formatting code"
-	@$(GO) fmt $(pkgs)
+# Use CGO for non-Linux builds.
+ifeq ($(GOOS), linux)
+	PROMU_CONF ?= .promu.yml
+else
+	ifndef GOOS
+		ifeq ($(GOHOSTOS), linux)
+			PROMU_CONF ?= .promu.yml
+		else
+			PROMU_CONF ?= .promu-cgo.yml
+		endif
+	else
+		PROMU_CONF ?= .promu-cgo.yml
+	endif
+endif
 
-vet:
-	@echo ">> vetting code"
-	@$(GO) vet $(pkgs)
+PROMU := $(FIRST_GOPATH)/bin/promu --config $(PROMU_CONF)
 
-build: promu
-	@echo ">> building binaries"
-	@$(PROMU) build --prefix $(PREFIX)
+# 64bit -> 32bit mapping for cross-checking. At least for amd64/386, the 64bit CPU can execute 32bit code but not the other way around, so we don't support cross-testing upwards.
+cross-test = skip-test-32bit
 
-tarball: promu
-	@echo ">> building release tarball"
-	@$(PROMU) tarball --prefix $(PREFIX) $(BIN_DIR)
+# By default, "cross" test with ourselves to cover unknown pairings.
+$(eval $(call goarch_pair,amd64,386))
+$(eval $(call goarch_pair,mips64,mips))
+$(eval $(call goarch_pair,mips64el,mipsel))
 
-crossbuild: promu
-	@echo ">> building"
-	@$(PROMU) crossbuild
+all:: vet common-all $(cross-test)
 
+.PHONY: skip-test-32bit
+skip-test-32bit:
+	@echo ">> SKIP running tests in 32-bit mode: not supported on $(GOHOSTOS)/$(GOHOSTARCH)"
+
+.PHONY: docker
 docker:
-	@echo ">> building docker image"
-	@docker build -t "$(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_TAG)" .
+ifeq ($(MACH), ppc64le)
+	$(eval DOCKERFILE=Dockerfile.ppc64le)
+endif
+	@echo ">> building docker image from $(DOCKERFILE)"
+	@docker build --file $(DOCKERFILE) -t "$(DOCKER_REPO)/$(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_TAG)" .
 
-release:
-	@$(PROMU) crossbuild tarballs
-	@$(PROMU) release .tarballs
+.PHONY: test-docker
+test-docker:
+	@echo ">> testing docker image"
+	./test_image.sh "$(DOCKER_REPO)/$(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_TAG)" 9100
 
-promu:
-	@GOOS=$(shell uname -s | tr A-Z a-z) \
-		GOARCH=$(subst x86_64,amd64,$(patsubst i%86,386,$(shell uname -m))) \
-		$(GO) get -u github.com/prometheus/promu
+.PHONY: promtool
+promtool: $(PROMTOOL)
 
+$(PROMTOOL):
+	$(eval PROMTOOL_TMP := $(shell mktemp -d))
+	curl -s -L $(PROMTOOL_URL) | tar -xvzf - -C $(PROMTOOL_TMP)
+	mkdir -p $(FIRST_GOPATH)/bin
+	cp $(PROMTOOL_TMP)/prometheus-$(PROMTOOL_VERSION).$(GO_BUILD_PLATFORM)/promtool $(FIRST_GOPATH)/bin/promtool
+	rm -r $(PROMTOOL_TMP)
 
-.PHONY: all style format build crossbuild test vet tarball docker promu
