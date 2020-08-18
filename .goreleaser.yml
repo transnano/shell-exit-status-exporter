@@ -36,7 +36,7 @@ nfpms:
     homepage: https://github.com/transnano/shell-exit-status-exporter
     maintainer: Transnano <transnano.jp@gmail.com>
     description: shell-exit-status-exporter is prometheus exporter for shell-exit-status metrics.
-    license: Apache 2.0
+    license: MIT
     formats:
       - deb
       - rpm
