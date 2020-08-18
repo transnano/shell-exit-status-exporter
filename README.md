@@ -1,4 +1,4 @@
-# Shell exit status Exporter
+# Shell exit status Exporter ![Releases](https://github.com/transnano/shell-exit-status-exporter/workflows/Releases/badge.svg) ![Publish Docker image](https://github.com/transnano/shell-exit-status-exporter/workflows/Publish%20Docker%20image/badge.svg) ![Vulnerability Scan](https://github.com/transnano/shell-exit-status-exporter/workflows/Vulnerability%20Scan/badge.svg)
 
 GitHub: https://github.com/transnano/shell-exit-status-exporter
 
@@ -6,7 +6,7 @@ Prometheus exporter written to execute and collect metrics on script exit status
 and duration. Designed to allow the execution of probes where support for the
 probe type wasn't easily configured with the Prometheus blackbox exporter.
 
-Minimum supported Go Version: 1.11.0
+Minimum supported Go Version: 1.15.0
 
 ## Sample Configuration
 
