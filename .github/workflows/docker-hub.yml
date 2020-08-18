@@ -31,7 +31,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: docker.pkg.github.com
-          repository: ${{ github.repository }}/local-ssl-exporter
+          repository: ${{ github.repository }}/shell-exit-status-exporter
           tag_with_ref: true
         env:
           DOCKER_BUILDKIT: 1
@@ -50,7 +50,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: docker.pkg.github.com
-          repository: ${{ github.repository }}/local-ssl-exporter
+          repository: ${{ github.repository }}/shell-exit-status-exporter
           tags: latest
         env:
           DOCKER_BUILDKIT: 1
