@@ -28,7 +28,7 @@ docker_cleanup() {
 }
 
 if [[ "$#" -ne 2 ]] ; then
-    echo "Usage: $0 transnano/shell-exit-status-exporter:0.0.3 9062" >&2
+    echo "Usage: $0 transnano/shell-exit-status-exporter:v0.0.4 9062" >&2
     exit 1
 fi
 

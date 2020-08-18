@@ -1,6 +1,6 @@
 # Shell exit status Exporter
 
-GitLab: https://gitlab.com/transnano/shell_exit_status_exporter
+GitHub: https://github.com/transnano/shell-exit-status-exporter
 
 Prometheus exporter written to execute and collect metrics on script exit status
 and duration. Designed to allow the execution of probes where support for the
@@ -34,7 +34,7 @@ docker run -d -p 9062:9062 --name shell-exit-status-exporter \
   -web.listen-address=":9062" \
   -web.telemetry-path="/metrics" \
   -config.shell="/bin/sh" \
-  transnano/shell-exit-status-exporter:0.0.3
+  transnano/shell-exit-status-exporter:v0.0.4
 ```
 
 You'll need to customize the docker image or use the binary on the host system

@@ -1,7 +1,7 @@
 FROM       quay.io/prometheus/busybox:latest
-LABEL      maintainer="Ryota Suginaga <transnano.jp@gmail.com>"
+LABEL      maintainer="Transnano <transnano.jp@gmail.com>"
 
-COPY       shell_exit_status_exporter /bin/shell-exit-status-exporter
+COPY       shell-exit-status-exporter /bin/shell-exit-status-exporter
 COPY       shell-exit-status-exporter.yml /etc/shell-exit-status-exporter/config.yml
 
 EXPOSE     9062

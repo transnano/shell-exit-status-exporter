@@ -1,0 +1,45 @@
+project_name: shell-exit-status-exporter
+env:
+  - GO111MODULE=on
+before:
+  hooks:
+    - go mod tidy
+builds:
+  - main: .
+    binary: shell-exit-status-exporter
+    ldflags:
+      - -s -w
+      - -X github.com/prometheus/common/version.Version={{.Version}}
+      - -X github.com/prometheus/common/version.BuildDate={{.Date}}
+      - -X github.com/prometheus/common/version.Branch=master
+      - -X github.com/prometheus/common/version.Revision={{.ShortCommit}}
+      - -X github.com/prometheus/common/version.BuildUser=transnano
+    env:
+      - CGO_ENABLED=0
+archives:
+  - name_template: '{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
+    replacements:
+      darwin: darwin
+      linux: linux
+      windows: windows
+      386: i386
+      amd64: x86_64
+    format_overrides:
+      - goos: windows
+        format: zip
+release:
+  prerelease: auto
+nfpms:
+  -
+    id: shell-exit-status-exporter-nfpms
+    package_name: shell-exit-status-exporter
+    homepage: https://github.com/transnano/shell-exit-status-exporter
+    maintainer: Transnano <transnano.jp@gmail.com>
+    description: shell-exit-status-exporter is prometheus exporter for shell-exit-status metrics.
+    license: Apache 2.0
+    formats:
+      - deb
+      - rpm
+    bindir: /usr/bin
+    epoch: 1
+    release: 1

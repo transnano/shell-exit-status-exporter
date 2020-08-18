@@ -181,7 +181,7 @@ func scriptRunHandler(w http.ResponseWriter, r *http.Request, config *Config) {
 }
 
 func init() {
-	prometheus.MustRegister(version.NewCollector("shell_exit_status_exporter"))
+	prometheus.MustRegister(version.NewCollector("shell-exit-status-exporter"))
 }
 
 func main() {
