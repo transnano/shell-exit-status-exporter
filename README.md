@@ -2,7 +2,7 @@
 
 ![License](https://img.shields.io/github/license/transnano/shell-exit-status-exporter?style=flat)
 
-![Container image version](https://img.shields.io/docker/v/transnano/shell-exit-status-exporter?style=flat)
+![Container image version](https://img.shields.io/docker/v/transnano/shell-exit-status-exporter/latest?style=flat)
 ![Container image size](https://img.shields.io/docker/image-size/transnano/shell-exit-status-exporter/latest?style=flat)
 ![Container image pulls](https://img.shields.io/docker/pulls/transnano/shell-exit-status-exporter?style=flat)
 
