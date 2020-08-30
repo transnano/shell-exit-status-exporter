@@ -1,7 +1,7 @@
 version: '2'
 services:
   shell:
-    image: transnano/shell-exit-status-exporter:v0.0.4
+    image: transnano/shell-exit-status-exporter:v0.0.5
     container_name: shell
     ports:
      - 9062:9062
