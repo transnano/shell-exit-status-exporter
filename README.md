@@ -1,5 +1,14 @@
 # Shell exit status Exporter ![Releases](https://github.com/transnano/shell-exit-status-exporter/workflows/Releases/badge.svg) ![Publish Docker image](https://github.com/transnano/shell-exit-status-exporter/workflows/Publish%20Docker%20image/badge.svg) ![Vulnerability Scan](https://github.com/transnano/shell-exit-status-exporter/workflows/Vulnerability%20Scan/badge.svg)
 
+![License](https://img.shields.io/github/license/transnano/shell-exit-status-exporter?style=flat)
+
+![Container image version](https://img.shields.io/docker/v/transnano/shell-exit-status-exporter?style=flat)
+![Container image size](https://img.shields.io/docker/image-size/transnano/shell-exit-status-exporter/latest?style=flat)
+![Container image pulls](https://img.shields.io/docker/pulls/transnano/shell-exit-status-exporter?style=flat)
+
+![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/transnano/shell-exit-status-exporter)
+[![Go Report Card](https://goreportcard.com/badge/github.com/transnano/shell-exit-status-exporter)](https://goreportcard.com/report/github.com/transnano/shell-exit-status-exporter)
+
 GitHub: https://github.com/transnano/shell-exit-status-exporter
 
 Prometheus exporter written to execute and collect metrics on script exit status
