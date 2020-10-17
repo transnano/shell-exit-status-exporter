@@ -1,4 +1,4 @@
-# Shell exit status Exporter ![Releases](https://github.com/transnano/shell-exit-status-exporter/workflows/Releases/badge.svg) ![Publish Docker image](https://github.com/transnano/shell-exit-status-exporter/workflows/Publish%20Docker%20image/badge.svg) ![Vulnerability Scan](https://github.com/transnano/shell-exit-status-exporter/workflows/Vulnerability%20Scan/badge.svg)
+# Shell exit status Exporter ![Releases](https://github.com/transnano/shell-exit-status-exporter/workflows/Releases/badge.svg) ![Publish Docker image](https://github.com/transnano/shell-exit-status-exporter/workflows/Publish%20Docker%20image/badge.svg) ![Vulnerability Scan](https://github.com/transnano/shell-exit-status-exporter/workflows/Vulnerability%20Scan/badge.svg) ![Code Scanning(CodeQL)](https://github.com/transnano/shell-exit-status-exporter/workflows/Code%20Scanning(CodeQL)/badge.svg)
 
 ![License](https://img.shields.io/github/license/transnano/shell-exit-status-exporter?style=flat)
 
