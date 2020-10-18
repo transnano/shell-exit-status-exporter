@@ -1,5 +1,5 @@
 # Start by building the application.
-FROM golang:1.15.2-buster as build
+FROM golang:1.15.3-buster as build
 
 WORKDIR /go/src/github.com/transnano/shell-exit-status-exporter/
 # For building Go Module required
