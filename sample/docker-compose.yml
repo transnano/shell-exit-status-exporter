@@ -20,7 +20,7 @@ services:
     ports:
       - 3000:3000
   node-exporter:
-    image: prom/node-exporter:v1.6.1
+    image: prom/node-exporter:v1.7.0
     container_name: node
     ports:
       - 9100:9100
